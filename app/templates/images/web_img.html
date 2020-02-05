@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="row">
+    <div class="col-md-12">
+        <h2>通过页面地址恢复删除</h2>
+        <h5><small>文章页获取文章内容图片，其他页面请修改xpath规则，//img/@src为获取页面全部图片</small></h5>
+    </div>
+    </div>
+    <hr>
+    <form  method="post" action="{{ url_for('web.images_web') }}" enctype='multipart/form-data'>
+        {% for filed in form %}
+            <div class="form-group">
+                {{ filed.label }}:{{ filed }}
+                {% if  filed.errors %}
+                    <div class="alert alert-warning" role="alert">{{ filed.errors[0] }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <hr>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block body %}
+    <h3>功能说明</h3>
+    <hr>
+    <div class="row">
+        <p>图片管理平台首页，相关操作请登录后进行</p>
+    </div>
+    <hr>
+    <div class="row">
+        <h3>恢复删除</h3>
+        <div>
+            <a href={{ url_for('web.images_recover') }} class="btn btn-primary">链接恢复删除</a>
+            <p>用于删除图片或页面链接文件，支持的域名查看配置详情中的域名</p>
+            <p>图片地址同时添加到白名单，可以点选相应选项</p>
+        </div>
+        <div>
+            <a href={{  url_for('web.images_web') }} class="btn btn-primary">页面包含图片恢复\删除</a>
+            <p>用于删除页面包含的图片链接，支持的图片域名查看配置详情中的域名链接</p>
+            <p>程序使用xpath规则爬取图片地址，默认爬取文章页面正文图片，爬取页面所有图片使用'//img/@src'，其他参考xpath语法参考http://www.w3school.com.cn/xpath/xpath_syntax.asp</p>
+        </div>
+        <div>
+            <a href={{ url_for('web.history') }} class="btn btn-primary">任务历史</a>
+            <p>执行以上操作会有需要操作的历史记录，查询详情可以查看任务执行情况，点击刷新cdn，执行成功的链接会刷新CDN缓存</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h3>CDN缓存刷新</h3>
+        <div>
+            <a href={{ url_for('web.flush_cdn') }} class="btn btn-primary">CDN缓存刷新</a>
+            <p>网宿CDN刷新，支持目录和链接地址</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h3>分布节点</h3>
+        <p>执行删除恢复操作的程序采用分布式节点部署，使用golang开发</p>
+        <p>节点运行前需配置相应的节点信息，执行目录下的worker_linux，同目录下worker.json为配置文件</p>
+        <p>新建节点流程：先新建配置信息，再新建节点，然后点击下发配置，最后运行节点服务器上的处理程序</p>
+        <a href={{ url_for('web.create_config') }} class="btn btn-primary">新建配置信息</a>
+        <p>新建配置信息的配置详情填入json格式配置，如：{"http://a.test.com/": ["/home/httpd/a.test.com/",
+            "/home/httpd/c.testimg.com/tmp/"]}，"http://c.testimg.com/"为用于正则配置的域名地址，
+            ["/home/httpd/c.testimg.com/","/home/httpd/c.testimg.com/tmp/"]，前面是域名根目录，后面是删除文件后保存目录。</p>
+        <a href={{ url_for('web.create_worker') }} class="btn btn-primary">新建节点</a>
+        <p>新建节点信息</p>
+        <a href={{ url_for('web.list_worker') }} class="btn btn-primary">节点详情</a>
+        <p>列出存在的节点信息，红色：没有相应节点运行，黄色：运行节点的配置信息与服务端不一致，点击相应节点的下发配置更新，绿色：正常</p>
+    </div>
+    <hr>
+    <div class="row">
+        <h3>图片白名单</h3>
+        <p>用户显示目前白名单中的图片</p>
+        <p>添加单独一张图片的白名单，可以在单独白名单中点击创建</p>
+        <p>点击删除后，图片会在下一次定时移除过期图片时被移除</p>
+    </div>
+    <hr>
+    <div class="row">
+        <h3>死链处理</h3>
+        <p>用于向域名根目录下deadlinks.txt文件添加死链地址</p>
+        <p>是否生效请到https://ziyuan.baidu.com/badlink/index查看deadlinks.txt文件是否在列表并访问正常</p>
+    </div>
+{% endblock %}

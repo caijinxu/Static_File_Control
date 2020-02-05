@@ -1,0 +1,11 @@
+.git
+.gitgnore
+.idea
+test
+25hf
+Outdated_File_Process/test.py
+Outdated_File_Process/etcdlog.log
+Find_white_image/
+Outdated_File_Process/
+__pycache__
+readme

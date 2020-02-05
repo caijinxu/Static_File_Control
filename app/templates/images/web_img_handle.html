@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1>页面获取的图片链接<small></small></h1>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+            <table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							页面链接
+						</th>
+						<th>
+							图片地址
+						</th>
+						<th>
+							选择
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for taskinfo in taskinfos %}
+
+                        <tr>
+                            <td><a href="{{ taskinfo.imgurl }}">{{ taskinfo.imgurl }}</a></td>
+                            {% if taskinfo.taskstatus == 0 %}
+                                <td class="bg-info">任务等待节处理</td>
+                            {% elif taskinfo.taskstatus == 1 %}
+                                <td class="bg-success">成功</td>
+                            {% elif taskinfo.taskstatus == 2 %}
+                                <td class="bg-danger">失败</td>
+                            {% else %}
+                                <td class="bg-warning">没有节点处理</td>
+                            {% endif %}
+                            <td>{{ taskinfo.remark }}</td>
+                            <td>{{ taskinfo.updatetime_datetime }}</td>
+                        </tr>
+
+                    {% endfor %}
+				</tbody>
+			</table>
+        </div>
+    </div>
+{% endblock %}

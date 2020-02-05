@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h1>网宿CDN缓存刷新</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form  method="post" enctype='multipart/form-data'>
+        {% for filed in form %}
+            <div class="form-group">
+                {{ filed.label }}:{{ filed }}
+                {% if  filed.errors %}
+                    <div class="alert alert-warning" role="alert">{{ filed.errors[0] }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+    </form>
+{% endblock %}

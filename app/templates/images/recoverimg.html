@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h2>CMS链接恢复删除</h2>
+            <h5>用于链接文件的删除与恢复，不支持文件夹操作</h5>
+        </div>
+    </div>
+    <hr>
+    <form  method="post" enctype='multipart/form-data' id='form_data'>
+        {% for filed in form %}
+            <div class="form-group">
+                {{ filed.label }}:{{ filed }}
+                {% if  filed.errors %}
+                    <div class="alert alert-warning" role="alert">{{ filed.errors[0] }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <hr>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+    </form>
+    <script>
+        // 页面加载完成后, 回调函数
+        $(document).ready(function() {
+
+            // 1, 绑定事件处理函数
+            $('#handlemod').on("click", function (event) {
+                if ( $(this).find('input:radio:checked').val() === "1") {
+                    $('#addwhiteimg').parent().removeClass('hidden');
+                    $('#relation').parent().addClass('hidden');
+                } else if ( $(this).find('input:radio:checked').val() === "2") {
+                    $('#relation').parent().removeClass('hidden');
+                    $('#addwhiteimg').parent().addClass('hidden');
+                }
+            })
+    })
+    </script>
+{% endblock %}

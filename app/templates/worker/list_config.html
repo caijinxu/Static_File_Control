@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block body %}
+    <style>
+        .pre-scrollable {
+        max-height: 100px;
+        overflow-y: scroll;
+        }
+    </style>
+    <h3>配置信息</h3>
+
+    <div class="row">
+            <div class="col-md-12">
+                <a href={{ url_for("web.create_config") }} class="btn btn-primary">新建配置信息</a>
+            </div>
+        </div>
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+            <table id="config_list" class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							最近修改时间
+						</th>
+						<th>
+							配置名称
+						</th>
+						<th class="col-md-5 column">
+							详细配置
+						</th>
+						<th>
+							备注
+						</th>
+
+                        <th class="col-md-1 column">
+							最后操作人
+						</th>
+                        <th>
+                            操作
+                        </th>
+					</tr>
+				</thead>
+                <tbody>
+                    {% for config in configs %}
+                        <tr>
+                            <td>{{ config.updatetime_datetime }}</td>
+                            <td class="config_name">{{ config.name }}</td>
+                            <td><pre class="pre-scrollable">{{ config.config }}</pre></td>
+                            <td>{{ config.remark }}</td>
+                            <td>{{ config.username }}</td>
+                            <td>
+                                <a href={{ url_for('web.edit_config', name=config.name) }} class="btn btn-primary">编辑</a>
+                                <button type="button" class="btn btn-danger del_config">删除</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function() {
+        // 删除配置
+        $("#config_list").on("click", ".del_config", function(event) { // javascript bind
+            var configName = $(this).parents("tr").children(".config_name").text()
+            $.ajax({
+                url: '{{ url_for('web.config_delete')}}',
+                type: 'post',
+                dataType: 'json',
+                data: {name: configName},
+                complete: function() {
+                    window.location.reload()
+                }
+            })
+        })
+    })
+    </script>
+{% endblock %}

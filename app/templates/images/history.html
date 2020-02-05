@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block body %}
+<style>
+  pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+  .pre-scrollable {
+        max-height: 100px;
+        overflow-y: scroll;
+        }
+</style>
+<div class="container">
+    <h3>历史操作</h3>
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+            <table class="table table-striped">
+				<thead>
+					<tr>
+						<th class="col-md-1 column">
+							操作时间
+						</th>
+						<th>
+							操作人
+						</th>
+						<th>
+							操作类型
+						</th>
+						<th>
+							备注
+						</th>
+                        <th class="col-md-6 column">
+                            页面含有图片链接
+                        </th>
+                        <th class="col-md-1 column">
+							查看执行情况
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for task in historytask %}
+
+                        <tr>
+                            <td>{{ task.createtime.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>{{ task.username }}</td>
+                            {% if task.handlemod == 1 %}
+                            <td class="bg-success">恢复</td>
+                            {% else %}
+                            <td class="bg-danger">删除</td>
+                            {% endif %}
+                            <td>{{ task.remark }}</td>
+                            {% if  task.webtaskinfo  %}
+                                <td><pre  class="pre-scrollable">{{ task.webtaskinfo }}</pre></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td><a href={{ url_for('web.historydetails', taskid=task.taskuuid) }} class="btn btn-primary">详情</a></td>
+                        </tr>
+
+                    {% endfor %}
+				</tbody>
+			</table>
+        </div>
+    </div>
+    {% if pageination %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if pageination.get("previous") %}
+                    <li>
+                        <a href="{{ url_for("web.history",page=pageination.get("previous")) }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                      <span aria-hidden="true">&laquo;</span>
+                    </li>
+                {% endif %}
+                {% for pag in pageination["pagelist"]  %}
+                    {% if pag == pageination["page"] %}
+                        <li class="active"><a href="{{ url_for("web.history",page=pag) }}">{{ pag }}</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for("web.history",page=pag) }}">{{ pag }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if  pageination.get("next") %}
+                    <li>
+                      <a href="{{ url_for("web.history",page=pageination.get("next")) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <span aria-hidden="true">&raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+
+{% endblock %}

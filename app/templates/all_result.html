@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block body %}
+    <form action="" method="post">
+        {{ form.KeyWord }}<br>
+        {% for msg in form.KeyWord.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.StartTime }}<br>
+        {% for msg in form.StartTime.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.StopTime }}<br>
+        {% for msg in form.StopTime.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.Title.label }}{{ form.Title }}<br>
+        {{ form.Url.label }}{{ form.Url }}<br>
+        {{ form.Time.label }}{{ form.Time }}<br>
+        {{ form.submit }}<br>
+    </form>
+    <table>
+        <tr>
+            <td>标题</td>
+            <td>时间</td>
+            <td>url</td>
+        </tr>
+        {% for article in result %}
+            <tr>
+                <td>{{ article.Title }}</td>
+                <td>{{ article.Time }}</td>
+                <td>{{ article.Url }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

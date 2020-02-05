@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block body %}
+    <style>
+        .pre-scrollable {
+        max-height: 100px;
+        overflow-y: scroll;
+        }
+    </style>
+    <h3>节点信息</h3>
+
+    <div class="row">
+            <div class="col-md-12">
+                <a href={{ url_for("web.create_worker") }} class="btn btn-primary">新建节点</a>
+            </div>
+        </div>
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+            <table id="worker_list" class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							节点名称
+						</th>
+						<th>
+							配置名称
+						</th>
+						<th>
+							配置更新时间
+						</th>
+						<th>
+							节点配置更新时间
+						</th>
+                        <th class="col-md-4 column">详情</th>
+                        <th class="col-md-2 column">
+							状态
+						</th>
+                        <th class="col-md-1 column">
+                            备注
+                        </th>
+                        <th>操作</th>
+					</tr>
+				</thead>
+                <tbody>
+                    {% for worker in workerlist %}
+                        <tr class="{{ worker.get("bg_status") }}">
+                            <td class="workername">{{ worker.get("workername") }}</td>
+                            <td class="config_name">{{ worker.get("config_name") }}</td>
+                            <td>{{ worker.get("config_updatetime") }}</td>
+                            <td>{{ worker.get("worker_updatetime") }}</td>
+                            <td><pre class="pre-scrollable">{{ worker.get("config") }}</pre></td>
+                            <td>{{ worker.get("status") }}</td>
+                            <td>{{ worker.get("remark") }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary send_config">下发配置</button>
+                                <a href="{{ url_for("web.edit_config", name=worker.get("config_name")) }}" class="btn btn-primary">编辑配置</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function() {
+        // 下发配置
+        $("#worker_list").on("click", ".send_config", function(event) { // javascript bind
+            var workerName = $(this).parents("tr").children(".workername").text()
+            $.ajax({
+                url: '{{ url_for('web.sendconfig')}}',
+                type: 'post',
+                dataType: 'json',
+                data: {workername: workerName},
+                complete: function() {
+                    window.location.reload()
+                }
+            })
+        })
+    })
+    </script>
+{% endblock %}

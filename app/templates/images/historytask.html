@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block body %}
+<style>
+  pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+<div class="container">
+    <h3>历史操作</h3>
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+            <table class="table table-striped">
+				<thead>
+					<tr>
+						<th class="col-md-1 column">
+							操作时间
+						</th>
+						<th>
+							操作人
+						</th>
+						<th>
+							操作类型
+						</th>
+						<th>
+							备注
+						</th>
+                        <th class="col-md-6 column">
+                            页面含有图片链接
+                        </th>
+                        <th class="col-md-1 column">
+							查看执行情况
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for task in historytask %}
+
+                        <tr>
+                            <td>{{ task.create_datetime }}</td>
+                            <td>{{ task.username }}</td>
+                            {% if task.handlemod == 1 %}
+                            <td class="bg-success">恢复</td>
+                            {% else %}
+                            <td class="bg-danger">删除</td>
+                            {% endif %}
+                            <td>{{ task.remark }}</td>
+                            {% if  task.webtaskinfo  %}
+                                <td><pre>{{ task.webtaskinfo }}</pre></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td><a href={{ url_for('web.taskdetails', taskid=task.id) }} class="btn btn-primary">详情</a></td>
+                        </tr>
+
+                    {% endfor %}
+				</tbody>
+			</table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

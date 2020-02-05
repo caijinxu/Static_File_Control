@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container">
+    <h3>任务历史操作</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" id="flushcdn">任务链接CDN缓存刷新</button>
+        </div>
+    </div>
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+            <table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							图片链接
+						</th>
+                        <th class="col-md-3 column">
+                        </th>
+						<th class="col-md-2 column">
+							任务状态
+						</th>
+						<th class="col-md-4 column">
+							备注
+						</th>
+						<th>
+							节点操作时间
+						</th>
+
+					</tr>
+				</thead>
+				<tbody>
+                    {% for taskinfo in taskinfos %}
+
+                        <tr>
+                            <td><a href="{{ taskinfo.imgurl }}">{{ taskinfo.imgurl }}</a></td>
+                            <td><img src="{{ taskinfo.imgurl }}?" class="img-responsive"></td>
+                            {% if taskinfo.taskstatus == 0 %}
+                                <td class="bg-info">任务等待节处理</td>
+                            {% elif taskinfo.taskstatus == 1 %}
+                                <td class="bg-success">成功</td>
+                            {% elif taskinfo.taskstatus == 2 %}
+                                <td class="bg-danger">失败</td>
+                            {% else %}
+                                <td class="bg-warning">没有节点处理</td>
+                            {% endif %}
+                            <td>{{ taskinfo.remark }}</td>
+                            <td>{{ taskinfo.updatetime_datetime }}</td>
+                        </tr>
+
+                    {% endfor %}
+				</tbody>
+			</table>
+        </div>
+    </div>
+</div>
+     <script>
+        // 页面加载完成后, 回调函数
+        $(document).ready(function() {
+            $('#flushcdn').on('click', function () {
+                $.ajax({
+                    url: '{{ url_for('web.flush_cdn_taskid', taskid=taskid) }}',
+                    type: 'GET',
+                    complete: function() {
+                        window.location.reload()
+                    }
+
+                })
+            })
+        })
+     </script>
+{% endblock %}

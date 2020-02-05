@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block body %}
+
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        {{ form.KeyWord }}<br>
+        {% for msg in form.KeyWord.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.StartTime }}<br>
+        {% for msg in form.StartTime.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.StopTime }}<br>
+        {% for msg in form.StopTime.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.Start.label }}<br>
+        {{ form.Start }}<br>
+        {% for msg in form.Start.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.Size.label }}<br>
+        {{ form.Size }}<br>
+        {% for msg in form.Size.errors %}
+            <small class="errors">{{ msg }}</small><br>
+        {% endfor %}
+        {{ form.submit }}<br>
+    </form>
+    <table>
+        <tr>
+            <td>标题</td>
+            <td>时间</td>
+            <td>url</td>
+        </tr>
+        {% for article in list_article %}
+            <tr>
+            <td>{{ article['title'] }}</td>
+            <td>{{ article['time'] }}</td>
+            <td>{{ article['url'] }}</td>
+            </tr>
+            <tr><td>总数</td><td>{{ article_count }}</td></tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

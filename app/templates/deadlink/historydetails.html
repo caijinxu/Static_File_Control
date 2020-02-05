@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container">
+    <h3>死链处理历史详情</h3>
+
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+            <table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							链接
+						</th>
+						<th class="col-md-2 column">
+							处理节点
+						</th>
+                        <th class="col-md-1 column">
+							状态
+						</th>
+						<th>
+                            节点操作时间
+						</th>
+						<th class="col-md-4 column">
+                            备注
+						</th>
+
+					</tr>
+				</thead>
+
+				<tbody>
+                    {% for urlinfo in taskinfo %}
+                        <tr>
+                        {% if  urlinfo.taskinfo | length  > 0  %}
+                            <td rowspan="{{ urlinfo.taskinfo | length }}"><a href="{{ urlinfo.url }}">{{ urlinfo.url }}</a></td>
+
+                            <td>{{ urlinfo.taskinfo[0].get("workname")}}</td>
+                            {% if urlinfo.taskinfo[0].get("status") == 'danger' %}
+                                 <td class="bg-{{ urlinfo.taskinfo[0].get("status") }}">操作失败</td>
+                            {% elif  urlinfo.taskinfo[0].get("status") == 'success' %}
+                                <td class="bg-{{ urlinfo.taskinfo[0].get("status") }}">操作成功</td>
+                            {% elif  urlinfo.taskinfo[0].get("status") == 'warning' %}
+                                <td class="bg-{{ urlinfo.taskinfo[0].get("status") }}">没有节点操作</td>
+                            {% else %}
+                                <td class="bg-info">链接等待节点处理</td>
+                            {% endif %}
+
+                            <td>
+                                {% if urlinfo.taskinfo[0].get("updatetime") %}
+                                    {{ urlinfo.taskinfo[0].updatetime.strftime('%Y-%m-%d %H:%M:%S') }}
+                                {% endif %}
+                            </td>
+                            <td>{{ urlinfo.taskinfo[0].get("remark") }}</td>
+                        {% endif %}
+                        </tr>
+                            {% if  urlinfo.taskinfo | length  > 1  %}
+                                {% for tinfo in urlinfo.taskinfo[1:] %}
+                                    <tr>
+                                    <td>{{ tinfo.get("workname")}}</td>
+                                    {% if tinfo.get("status") == 'danger' %}
+                                         <td class="bg-{{ tinfo.get("status") }}">操作失败</td>
+                                    {% elif  tinfo.get("status") == 'success' %}
+                                        <td class="bg-{{ tinfo.get("status") }}">操作成功</td>
+                                    {% elif  tinfo.get("status") == 'warning' %}
+                                        <td class="bg-{{ tinfo.get("status") }}">没有节点操作</td>
+                                    {% else %}
+                                        <td class="bg-info">链接等待节点处理</td>
+                                    {% endif %}
+                                    <td>
+                                        {% if tinfo.get("updatetime") %}
+                                            {{ tinfo.updatetime.strftime('%Y-%m-%d %H:%M:%S') }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ tinfo.get("remark") }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+
+                    {% endfor %}
+				</tbody>
+			</table>
+        </div>
+    </div>
+    {% if pageination %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if pageination.get("previous") %}
+                    <li>
+                        <a href="{{ url_for("web.deadhistorydetails",taskid=taskid,page=pageination.get("previous")) }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                      <span aria-hidden="true">&laquo;</span>
+                    </li>
+                {% endif %}
+                {% for pag in pageination["pagelist"]  %}
+                    {% if pag == pageination["page"] %}
+                        <li class="active"><a href="{{ url_for("web.deadhistorydetails",taskid=taskid,page=pag) }}">{{ pag }}</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for("web.deadhistorydetails",taskid=taskid,page=pag) }}">{{ pag }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if  pageination.get("next") %}
+                    <li>
+                      <a href="{{ url_for("web.deadhistorydetails",taskid=taskid,page=pageination.get("next")) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <span aria-hidden="true">&raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+     <script>
+        // 页面加载完成后, 回调函数
+        $(document).ready(function() {
+            $('#flushcdn').on('click', function () {
+                $.ajax({
+                    url: '{{ url_for('web.flush_cdn_taskuuid',  taskuuid=taskinfo.taskuuid) }}',
+                    type: 'GET',
+                    complete: function() {
+                        window.location.reload()
+                    }
+
+                })
+            })
+        })
+     </script>
+{% endblock %}

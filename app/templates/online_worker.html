@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container">
+    <h3>在线恢复删除节点</h3>
+    <h5>如果发现节点不在列表，请检查节点程序是否正常运行</h5>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+        {% if workerinfo %}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							主机IP地址
+						</th>
+						<th>
+							正则配备域名
+						</th>
+						<th>
+							域名root目录
+						</th>
+						<th>
+							删除文件存放目录
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for ip,info in workerinfo.items() %}
+                            {% for url,path in info.items() %}
+                                <tr class="success">
+                                    <td>{{ ip }}</td>
+                                    <td>{{ url }}</td>
+                                    <td>{{ path[0] }}</td>
+                                    <td>{{ path[1] }}</td>
+                                </tr>
+                            {% endfor %}
+                    {% endfor %}
+				</tbody>
+			</table>
+        {% else %}
+            <p class="bg-danger">没有在线的worker节点</p>
+        {% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
