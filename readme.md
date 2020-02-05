@@ -8,7 +8,7 @@
 
 [相应操作节点项目]: https://github.com/caijinxu/img_worker
 
-![readme](.\readme.png)
+
 
 ## 功能
 
@@ -25,6 +25,8 @@
 
 
 ### 项目架构
+
+![](.\readme.png)
 
 
 
